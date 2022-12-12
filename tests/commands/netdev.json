@@ -1,0 +1,31 @@
+{
+  "nftables": [
+    {
+      "flush": {
+        "ruleset": null
+      }
+    },
+    {
+      "add": {
+        "table": {
+          "family": "netdev",
+          "name": "test_table"
+        }
+      }
+    },
+    {
+      "add": {
+        "chain": {
+          "family": "netdev",
+          "table": "test_table",
+          "name": "test_chain",
+          "type": "filter",
+          "hook": "ingress",
+          "prio": 0,
+          "dev": "d0",
+          "policy": "accept"
+        }
+      }
+    }
+  ]
+}

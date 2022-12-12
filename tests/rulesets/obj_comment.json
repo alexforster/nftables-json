@@ -1,0 +1,29 @@
+{
+  "nftables": [
+    {
+      "metainfo": {
+        "version": "1.0.5",
+        "release_name": "Lester Gooch #4",
+        "json_schema_version": 1
+      }
+    },
+    {
+      "table": {
+        "family": "inet",
+        "name": "t",
+        "handle": 9
+      }
+    },
+    {
+      "counter": {
+        "family": "inet",
+        "name": "mycounter",
+        "table": "t",
+        "handle": 1,
+        "comment": "my comment in counter",
+        "packets": 0,
+        "bytes": 0
+      }
+    }
+  ]
+}

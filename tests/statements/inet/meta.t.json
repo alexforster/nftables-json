@@ -1,0 +1,291 @@
+# meta nfproto ipv4
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+	    "op": "==",
+            "right": "ipv4"
+        }
+    }
+]
+
+# meta nfproto ipv6
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+	    "op": "==",
+            "right": "ipv6"
+        }
+    }
+]
+
+# meta nfproto {ipv4, ipv6}
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+	    "op": "==",
+            "right": {
+                "set": [
+                    "ipv4",
+                    "ipv6"
+                ]
+            }
+        }
+    }
+]
+
+# meta nfproto != {ipv4, ipv6}
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+            "op": "!=",
+            "right": {
+                "set": [
+                    "ipv4",
+                    "ipv6"
+                ]
+            }
+        }
+    }
+]
+
+# meta nfproto ipv6 tcp dport 22
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+	    "op": "==",
+            "right": "ipv6"
+        }
+    },
+    {
+        "match": {
+            "left": {
+                "payload": {
+                    "field": "dport",
+                    "protocol": "tcp"
+                }
+            },
+	    "op": "==",
+            "right": 22
+        }
+    }
+]
+
+# meta nfproto ipv4 tcp dport 22
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+	    "op": "==",
+            "right": "ipv4"
+        }
+    },
+    {
+        "match": {
+            "left": {
+                "payload": {
+                    "field": "dport",
+                    "protocol": "tcp"
+                }
+            },
+	    "op": "==",
+            "right": 22
+        }
+    }
+]
+
+# meta nfproto ipv4 ip saddr 1.2.3.4
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+	    "op": "==",
+            "right": "ipv4"
+        }
+    },
+    {
+        "match": {
+            "left": {
+                "payload": {
+                    "field": "saddr",
+                    "protocol": "ip"
+                }
+            },
+	    "op": "==",
+            "right": "1.2.3.4"
+        }
+    }
+]
+
+# meta nfproto ipv6 meta l4proto tcp
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+	    "op": "==",
+            "right": "ipv6"
+        }
+    },
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "l4proto" }
+            },
+	    "op": "==",
+            "right": "tcp"
+        }
+    }
+]
+
+# meta nfproto ipv4 counter ip saddr 1.2.3.4
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+	    "op": "==",
+            "right": "ipv4"
+        }
+    },
+    {
+        "counter": null
+    },
+    {
+        "match": {
+            "left": {
+                "payload": {
+                    "field": "saddr",
+                    "protocol": "ip"
+                }
+            },
+	    "op": "==",
+            "right": "1.2.3.4"
+        }
+    }
+]
+
+# meta ipsec exists
+[
+    {
+        "match": {
+            "left": {
+                "meta": {
+                    "key": "ipsec"
+                }
+            },
+            "op": "==",
+            "right": true
+        }
+    }
+]
+
+# meta secpath missing
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "secpath" }
+            },
+	    "op": "==",
+            "right": false
+        }
+    }
+]
+
+# meta mark set ct mark >> 8
+[
+    {
+        "mangle": {
+            "key": {
+                "meta": {
+                    "key": "mark"
+                }
+            },
+            "value": {
+                ">>": [
+                    {
+                        "ct": {
+                            "key": "mark"
+                        }
+                    },
+                    8
+                ]
+            }
+        }
+    }
+]
+
+# meta protocol ip udp dport 67
+[
+    {
+        "match": {
+            "left": {
+                "meta": {
+                    "key": "protocol"
+                }
+            },
+            "op": "==",
+            "right": "ip"
+        }
+    },
+    {
+        "match": {
+            "left": {
+                "payload": {
+                    "field": "dport",
+                    "protocol": "udp"
+                }
+            },
+            "op": "==",
+            "right": 67
+        }
+    }
+]
+
+# meta protocol ip6 udp dport 67
+[
+    {
+        "match": {
+            "left": {
+                "meta": {
+                    "key": "protocol"
+                }
+            },
+            "op": "==",
+            "right": "ip6"
+        }
+    },
+    {
+        "match": {
+            "left": {
+                "payload": {
+                    "field": "dport",
+                    "protocol": "udp"
+                }
+            },
+            "op": "==",
+            "right": 67
+        }
+    }
+]

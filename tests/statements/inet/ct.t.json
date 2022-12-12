@@ -1,0 +1,60 @@
+# meta nfproto ipv4 ct original saddr 1.2.3.4
+[
+    {
+        "match": {
+            "left": {
+                "meta": { "key": "nfproto" }
+            },
+	    "op": "==",
+            "right": "ipv4"
+        }
+    },
+    {
+        "match": {
+            "left": {
+                "ct": {
+                    "dir": "original",
+                    "key": "saddr"
+                }
+            },
+	    "op": "==",
+            "right": "1.2.3.4"
+        }
+    }
+]
+
+# ct original ip6 saddr ::1
+[
+    {
+        "match": {
+            "left": {
+                "ct": {
+                    "dir": "original",
+                    "key": "ip6 saddr"
+                }
+            },
+	    "op": "==",
+            "right": "::1"
+        }
+    }
+]
+
+# ct original ip daddr 1.2.3.4 accept
+[
+    {
+        "match": {
+            "left": {
+                "ct": {
+                    "dir": "original",
+                    "key": "ip daddr"
+                }
+            },
+            "op": "==",
+            "right": "1.2.3.4"
+        }
+    },
+    {
+        "accept": null
+    }
+]
+

@@ -1,0 +1,24 @@
+# meter xyz size 8192 { ip saddr timeout 30s counter}
+[
+    {
+        "meter": {
+            "key": {
+                "elem": {
+                    "timeout": 30,
+                    "val": {
+                        "payload": {
+                            "field": "saddr",
+                            "protocol": "ip"
+                        }
+                    }
+                }
+            },
+            "name": "xyz",
+            "size": 8192,
+            "stmt": {
+                "counter": null
+            }
+        }
+    }
+]
+

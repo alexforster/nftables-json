@@ -1,0 +1,21 @@
+# Copyright (c) nftables-json Developers
+# SPDX-License-Identifier: MIT OR Apache-2.0
+
+[package]
+name = "nftables-json"
+version = "0.1.0"
+description = "JSON model for interacting with nftables' nft command"
+readme = "README.md"
+authors = ["Alex Forster <alex@alexforster.com>"]
+repository = "https://github.com/alexforster/nftables-json"
+homepage = "https://github.com/alexforster/nftables-json"
+license = "MIT OR Apache-2.0"
+edition = "2021"
+
+[badges]
+maintenance = { status = "passively-maintained" }
+
+[dependencies]
+serde = { version = "~1.0", features = ["derive"] } # MIT OR Apache-2.0
+serde_json = { version = "~1.0" } # MIT OR Apache-2.0
+serde_with = { version = "~2.1", features = ["json"] } # MIT OR Apache-2.0
