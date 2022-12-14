@@ -1,5 +1,12 @@
 # nftables-json
 
+**Serde JSON model for interacting with the nftables `nft` executable**
+
+Provides Rust types that map directly to the nftables JSON object model,
+allowing serialization and deserialization of input and output from the
+`nft --json` command using [Serde](https://crates.io/crates/serde) and
+[`serde_json`](https://crates.io/crates/serde_json).
+
 ### Contributing
 
 This library is made available under the terms of either the [Apache License,

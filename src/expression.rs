@@ -1,7 +1,7 @@
 // Copyright (c) nftables-json Developers
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-use crate::*;
+//! Provides types related to specifying a rule's match criteria
 
 #[serde_with::apply(Option => #[serde(default, skip_serializing_if = "Option::is_none")])]
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
@@ -58,6 +58,7 @@ pub struct Fib {
 #[serde_with::apply(Option => #[serde(default, skip_serializing_if = "Option::is_none")])]
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
+#[non_exhaustive]
 pub enum Hash {
     Jhash {
         #[serde(rename = "mod")]
@@ -129,8 +130,8 @@ pub struct Numgen {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Osf {
-    key: String,
-    ttl: Option<String>,
+    pub key: String,
+    pub ttl: Option<String>,
 }
 
 #[serde_with::apply(Option => #[serde(default, skip_serializing_if = "Option::is_none")])]
@@ -169,7 +170,7 @@ pub struct SctpChunk {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Socket {
-    key: Option<String>,
+    pub key: Option<String>,
 }
 
 #[serde_with::apply(Option => #[serde(default, skip_serializing_if = "Option::is_none")])]
@@ -202,6 +203,7 @@ pub struct Tproxy {
 #[serde_with::apply(Option => #[serde(default, skip_serializing_if = "Option::is_none")])]
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
+#[non_exhaustive]
 pub enum Verdict {
     Accept(()),
     Drop(()),
@@ -209,4 +211,83 @@ pub enum Verdict {
     Return(()),
     Jump { target: String },
     Goto { target: String },
+}
+
+/// Represents a rule's match criteria
+#[serde_with::apply(Option => #[serde(default, skip_serializing_if = "Option::is_none")])]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[serde(deny_unknown_fields, untagged)]
+#[non_exhaustive]
+pub enum Expression {
+    Immediate(Immediate),
+    List(Vec<Self>),
+    Concat {
+        concat: Vec<Self>,
+    },
+    Set {
+        set: Vec<Self>,
+    },
+    Map {
+        map: Map,
+    },
+    Prefix {
+        prefix: Prefix,
+    },
+    Range {
+        range: (Immediate, Immediate),
+    },
+    Payload {
+        payload: Payload,
+    },
+    Exthdr {
+        exthdr: Exthdr,
+    },
+    IpOption {
+        #[serde(rename = "ip option")]
+        ip_option: IpOption,
+    },
+    TcpOption {
+        #[serde(rename = "tcp option")]
+        tcp_option: TcpOption,
+    },
+    SctpChunk {
+        #[serde(rename = "sctp chunk")]
+        sctp_chunk: SctpChunk,
+    },
+    Meta {
+        meta: Meta,
+    },
+    Rt {
+        rt: Rt,
+    },
+    Ct {
+        ct: Ct,
+    },
+    Numgen {
+        numgen: Numgen,
+    },
+    Hash(Hash),
+    Fib {
+        fib: Fib,
+    },
+    Xfrm {
+        ipsec: Xfrm,
+    },
+    Binary(Binary),
+    Verdict(Verdict),
+    Elem {
+        elem: Elem,
+    },
+    Socket {
+        socket: Socket,
+    },
+    Osf {
+        osf: Osf,
+    },
+    Synproxy {
+        synproxy: Option<Synproxy>,
+    },
+    Tproxy {
+        tproxy: Tproxy,
+    },
 }

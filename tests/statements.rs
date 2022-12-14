@@ -124,7 +124,7 @@ fn test_case(i: usize, statement: &str, json: &str) {
     eprintln!("[{}] stmt:     {:?}", i, statement);
     let expected = serde_json::from_str::<serde_json::Value>(json).unwrap().to_string();
     eprintln!("[{}] expected: {}", i, expected);
-    let deserialized: Vec<Statement> = serde_json::from_str(json).unwrap();
+    let deserialized: Vec<statement::Statement> = serde_json::from_str(json).unwrap();
     let reserialized = serde_json::to_string(&deserialized).unwrap();
     let actual = serde_json::from_str::<serde_json::Value>(&reserialized).unwrap().to_string();
     eprintln!("[{}] actual:   {}", i, actual);
