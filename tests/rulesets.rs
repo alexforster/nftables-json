@@ -16,8 +16,8 @@ fn test() {
     for (i, testcase) in TESTCASES.iter().enumerate() {
         let expected = serde_json::from_str::<serde_json::Value>(testcase).unwrap().to_string();
         eprintln!("[{}] expected: {}", i, expected);
-        let deserialized = object::Objects::from_str(testcase).unwrap();
-        let reserialized = serde_json::to_string(&deserialized).unwrap();
+        let deserialized = serde_json::from_str(testcase).unwrap();
+        let reserialized = object::Objects::to_string(&deserialized).unwrap();
         let actual = serde_json::from_str::<serde_json::Value>(&reserialized).unwrap().to_string();
         eprintln!("[{}] actual:   {}", i, actual);
         eprintln!("[{}] repr:     {:?}", i, deserialized);

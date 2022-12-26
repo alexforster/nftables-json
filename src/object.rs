@@ -269,16 +269,18 @@ pub enum Object {
     Synproxy(Synproxy),
 }
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+/// Represents the components of an nftables ruleset
+#[serde_with::apply(Option => #[serde(default, skip_serializing_if = "Option::is_none")])]
+#[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Objects {
     #[serde(rename = "nftables")]
-    pub objects: Vec<Object>,
+    objects: Vec<Object>,
 }
 
 impl Objects {
-    pub fn new<I: IntoIterator<Item = Object>>(objects: I) -> Self {
-        Self { objects: objects.into_iter().collect::<Vec<_>>() }
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn from_value(value: serde_json::Value) -> serde_json::Result<Self> {
@@ -293,11 +295,7 @@ impl Objects {
         serde_json::from_slice(slice)
     }
 
-    pub fn from_reader<R, T>(reader: R) -> serde_json::Result<Self>
-    where
-        R: std::io::Read,
-        T: serde::de::DeserializeOwned,
-    {
+    pub fn from_reader<R: std::io::Read>(reader: R) -> serde_json::Result<Self> {
         serde_json::from_reader(reader)
     }
 
@@ -307,6 +305,62 @@ impl Objects {
 
     pub fn to_string(&self) -> serde_json::Result<String> {
         serde_json::to_string(self)
+    }
+}
+
+impl From<&[Object]> for Objects {
+    fn from(value: &[Object]) -> Self {
+        Self { objects: Vec::from(value) }
+    }
+}
+
+impl From<&mut [Object]> for Objects {
+    fn from(value: &mut [Object]) -> Self {
+        Self { objects: Vec::from(value) }
+    }
+}
+
+impl From<Box<[Object]>> for Objects {
+    fn from(value: Box<[Object]>) -> Self {
+        Self { objects: Vec::from(value) }
+    }
+}
+
+impl From<Vec<Object>> for Objects {
+    fn from(value: Vec<Object>) -> Self {
+        Self { objects: Vec::from(value) }
+    }
+}
+
+impl FromIterator<Object> for Objects {
+    fn from_iter<T: IntoIterator<Item = Object>>(iter: T) -> Self {
+        Self { objects: Vec::from_iter(iter) }
+    }
+}
+
+impl Extend<Object> for Objects {
+    fn extend<T: IntoIterator<Item = Object>>(&mut self, iter: T) {
+        self.objects.extend(iter.into_iter());
+    }
+}
+
+impl<'a> Extend<&'a Object> for Objects {
+    fn extend<T: IntoIterator<Item = &'a Object>>(&mut self, iter: T) {
+        self.objects.extend(iter.into_iter().map(|item| item.clone()));
+    }
+}
+
+impl std::ops::Deref for Objects {
+    type Target = [Object];
+
+    fn deref(&self) -> &Self::Target {
+        &self.objects
+    }
+}
+
+impl std::ops::DerefMut for Objects {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.objects
     }
 }
 

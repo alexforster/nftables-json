@@ -15,7 +15,8 @@
 //! ```rust
 //! use nftables_json::{command::*, expression::*, statement::*};
 //!
-//! let commands = Commands::new([
+//! let mut commands = Commands::default();
+//! commands.extend([
 //!     // flush rulesets for all families
 //!     Command::Flush(Flush::Ruleset(None)),
 //!     // create a new table called "default"
@@ -93,9 +94,9 @@
 //! ]}
 //! "#;
 //!
-//! let output = Objects::from_str(output_str).unwrap();
+//! let objects = Objects::from_str(output_str).unwrap();
 //!
-//! for object in output.objects {
+//! for object in objects.iter() {
 //!     match object {
 //!         Object::Metainfo(Metainfo { json_schema_version, .. }) => {
 //!             eprintln!("[metainfo] schema version {json_schema_version}");

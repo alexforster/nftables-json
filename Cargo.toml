@@ -3,7 +3,7 @@
 
 [package]
 name = "nftables-json"
-version = "0.2.0"
+version = "0.3.0"
 description = "Serde JSON model for interacting with the nftables `nft` executable"
 readme = "README.md"
 authors = ["Alex Forster <alex@alexforster.com>"]

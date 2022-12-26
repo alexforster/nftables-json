@@ -803,16 +803,16 @@ pub enum Command {
 
 /// Represents a list of commands to issue to the `nft` binary
 #[serde_with::apply(Option => #[serde(default, skip_serializing_if = "Option::is_none")])]
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Commands {
     #[serde(rename = "nftables")]
-    pub commands: Vec<Command>,
+    commands: Vec<Command>,
 }
 
 impl Commands {
-    pub fn new<I: IntoIterator<Item = Command>>(commands: I) -> Self {
-        Self { commands: commands.into_iter().collect::<Vec<_>>() }
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn from_value(value: serde_json::Value) -> serde_json::Result<Self> {
@@ -827,11 +827,7 @@ impl Commands {
         serde_json::from_slice(slice)
     }
 
-    pub fn from_reader<R, T>(reader: R) -> serde_json::Result<Self>
-    where
-        R: std::io::Read,
-        T: serde::de::DeserializeOwned,
-    {
+    pub fn from_reader<R: std::io::Read>(reader: R) -> serde_json::Result<Self> {
         serde_json::from_reader(reader)
     }
 
@@ -841,6 +837,62 @@ impl Commands {
 
     pub fn to_string(&self) -> serde_json::Result<String> {
         serde_json::to_string(self)
+    }
+}
+
+impl From<&[Command]> for Commands {
+    fn from(value: &[Command]) -> Self {
+        Self { commands: Vec::from(value) }
+    }
+}
+
+impl From<&mut [Command]> for Commands {
+    fn from(value: &mut [Command]) -> Self {
+        Self { commands: Vec::from(value) }
+    }
+}
+
+impl From<Box<[Command]>> for Commands {
+    fn from(value: Box<[Command]>) -> Self {
+        Self { commands: Vec::from(value) }
+    }
+}
+
+impl From<Vec<Command>> for Commands {
+    fn from(value: Vec<Command>) -> Self {
+        Self { commands: Vec::from(value) }
+    }
+}
+
+impl FromIterator<Command> for Commands {
+    fn from_iter<T: IntoIterator<Item = Command>>(iter: T) -> Self {
+        Self { commands: Vec::from_iter(iter) }
+    }
+}
+
+impl Extend<Command> for Commands {
+    fn extend<T: IntoIterator<Item = Command>>(&mut self, iter: T) {
+        self.commands.extend(iter.into_iter());
+    }
+}
+
+impl<'a> Extend<&'a Command> for Commands {
+    fn extend<T: IntoIterator<Item = &'a Command>>(&mut self, iter: T) {
+        self.commands.extend(iter.into_iter().map(|item| item.clone()));
+    }
+}
+
+impl std::ops::Deref for Commands {
+    type Target = [Command];
+
+    fn deref(&self) -> &Self::Target {
+        &self.commands
+    }
+}
+
+impl std::ops::DerefMut for Commands {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.commands
     }
 }
 
